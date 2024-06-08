@@ -1,9 +1,11 @@
 package org.example.system.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,25 +18,56 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
+/**
+ * Redis配置类.
+ * 启用缓存并设置Redis连接、模板和缓存管理器.
+ * 作者: David
+ */
 @Configuration
 @EnableCaching
+@PropertySource("classpath:Redis.properties")
 public class RedisConfig extends CachingConfigurerSupport {
+
+    // 从配置文件中注入Redis属性
+    @Value("${redis.host}")
+    private String redisHost;
+
+    @Value("${redis.port}")
+    private int redisPort;
+
+    @Value("${redis.password}")
+    private String redisPassword;
+
+    @Value("${redis.database}")
+    private int redisDatabase;
 
     public RedisConfig() {
         super();
         System.out.println("RedisConfig.RedisConfig()");
     }
 
+    /**
+     * 配置Redis连接工厂.
+     *
+     * @return RedisConnectionFactory
+     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-        jedisConnectionFactory.setHostName("114.132.222.183");
-        jedisConnectionFactory.setPort(6379);
-        jedisConnectionFactory.setPassword("#Alone117");
+        jedisConnectionFactory.setHostName(redisHost);
+        jedisConnectionFactory.setPort(redisPort);
+        jedisConnectionFactory.setPassword(redisPassword);
+        jedisConnectionFactory.setDatabase(redisDatabase);
 
         return jedisConnectionFactory;
     }
 
+    /**
+     * 配置Redis模板.
+     *
+     * @param connectionFactory Redis连接工厂
+     * @return RedisTemplate<String, Object>
+     */
     @Bean
     @SuppressWarnings(value = { "unchecked", "rawtypes" })
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
@@ -56,6 +89,12 @@ public class RedisConfig extends CachingConfigurerSupport {
         return template;
     }
 
+    /**
+     * 配置Redis缓存管理器.
+     *
+     * @param redisConnectionFactory Redis连接工厂
+     * @return RedisCacheManager
+     */
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -68,6 +107,11 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .build();
     }
 
+    /**
+     * 配置限流脚本.
+     *
+     * @return DefaultRedisScript<Long>
+     */
     @Bean
     public DefaultRedisScript<Long> limitScript() {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
@@ -77,7 +121,9 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     /**
-     * 限流脚本
+     * 提供限流Lua脚本文本.
+     *
+     * @return String
      */
     private String limitScriptText() {
         return "local key = KEYS[1]\n" +

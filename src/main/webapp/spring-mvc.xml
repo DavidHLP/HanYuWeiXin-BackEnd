@@ -47,20 +47,4 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-<!--    &lt;!&ndash; Redis configuration &ndash;&gt;-->
-<!--    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">-->
-<!--        <property name="hostName" value="114.132.222.183" />-->
-<!--        <property name="port" value="6379" />-->
-<!--        <property name="password" value="#Alone117"/>-->
-<!--    </bean>-->
-
-<!--    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">-->
-<!--        <property name="connectionFactory" ref="jedisConnectionFactory" />-->
-<!--        <property name="valueSerializer">-->
-<!--            <bean class="org.springframework.data.redis.serializer.GenericToStringSerializer">-->
-<!--                <constructor-arg value="java.lang.Object" />-->
-<!--            </bean>-->
-<!--        </property>-->
-<!--    </bean>-->
-
 </beans>
