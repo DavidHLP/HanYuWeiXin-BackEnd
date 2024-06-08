@@ -12,6 +12,7 @@ target/
 *.iml
 *.ipr
 *.properties
+**/**/Redis.properties
 
 ### Eclipse ###
 .apt_generated
