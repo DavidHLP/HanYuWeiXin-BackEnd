@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/data/redis">
+
+    <!-- 扫描指定包中的组件 -->
+    <context:component-scan base-package="org.example.system"/>
+
+    <!-- 启用注解驱动-->
+    <mvc:annotation-driven />
+    <context:annotation-config/>
+
+    <!-- 配置CORS（跨域资源共享） -->
+    <bean id="corsFilter" class="org.springframework.web.filter.CorsFilter">
+        <constructor-arg>
+            <bean class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+                <property name="corsConfigurations">
+                    <map>
+                        <entry key="/**">
+                            <bean class="org.springframework.web.cors.CorsConfiguration">
+                                <property name="allowedOrigins" value="*" />
+                                <property name="allowedMethods" value="*" />
+                                <property name="allowedHeaders" value="*" />
+                                <property name="allowCredentials" value="true" />
+                            </bean>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/api/login/**"/>
+            <bean class="org.example.system.config.FilterConfig"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+<!--    &lt;!&ndash; Redis configuration &ndash;&gt;-->
+<!--    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">-->
+<!--        <property name="hostName" value="114.132.222.183" />-->
+<!--        <property name="port" value="6379" />-->
+<!--        <property name="password" value="#Alone117"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">-->
+<!--        <property name="connectionFactory" ref="jedisConnectionFactory" />-->
+<!--        <property name="valueSerializer">-->
+<!--            <bean class="org.springframework.data.redis.serializer.GenericToStringSerializer">-->
+<!--                <constructor-arg value="java.lang.Object" />-->
+<!--            </bean>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+</beans>
