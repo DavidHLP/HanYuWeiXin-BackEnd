@@ -43,6 +43,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/api/login/**"/>
+            <mvc:exclude-mapping path="/api/register/**"/>
             <bean class="org.example.system.config.FilterConfig"/>
         </mvc:interceptor>
     </mvc:interceptors>
