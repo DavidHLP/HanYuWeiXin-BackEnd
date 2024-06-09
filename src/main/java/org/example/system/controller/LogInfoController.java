@@ -11,18 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * LogInfoController 处理用户登录请求。
+ *
+ * @author David
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/api")
 public class LogInfoController {
+
     @Resource
     private LogInfoService logInfoServiceImpl;
 
+    /**
+     * 用户登录接口
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 包含结果的 ResponseEntity
+     */
     @GetMapping("/login")
     public ResponseEntity<ResultMap> login(String username, String password) {
         try {
             String token = logInfoServiceImpl.login(username, password);
 
-            // 将token放入响应头中
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", token);
 

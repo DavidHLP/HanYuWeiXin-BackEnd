@@ -46,7 +46,7 @@ public class FilterConfig implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("Request authorized");
+//        System.out.println("Request authorized");
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -117,7 +117,6 @@ public class FilterConfig implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        // 可以在这里添加后处理逻辑
     }
 
     /**
@@ -130,7 +129,6 @@ public class FilterConfig implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        // 可以在这里添加完成后的清理逻辑
-        System.out.println("Request completed");
+//        System.out.println("Request completed");
     }
 }
