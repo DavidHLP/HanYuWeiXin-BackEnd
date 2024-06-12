@@ -14,6 +14,11 @@
     <!-- 扫描指定包中的组件 -->
     <context:component-scan base-package="org.example.system"/>
 
+    <!--  限制大小  -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/> <!-- 10MB -->
+    </bean>
+
     <!-- 启用注解驱动-->
     <mvc:annotation-driven />
     <context:annotation-config/>

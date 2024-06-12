@@ -1,6 +1,9 @@
 package org.example.home.service;
 
+import org.example.home.controller.utils.UrlAndBollean;
 import org.example.home.domain.ImageUrl;
+import org.example.system.domain.LoginUser;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,4 +22,6 @@ public interface ImageService {
      * @return 图像URL列表
      */
     public List<ImageUrl> selectById(int parentId);
+
+    public UrlAndBollean insertAndUpload(MultipartFile[] files , String path , LoginUser user) throws Exception;
 }

@@ -1,6 +1,8 @@
 package org.example.system.service.Impl;
 
 import org.example.system.domain.LoginUser;
+import org.example.system.domain.VO.LoginInfo;
+import org.example.system.domain.userInfo;
 import org.example.system.mapper.LogInfoMapper;
 import org.example.system.service.LogInfoService;
 import org.example.system.utils.HashUtils;
@@ -37,7 +39,7 @@ public class LogInfoServiceImpl implements LogInfoService {
      * @throws Exception 当密码加密或其他处理出现问题时抛出异常
      */
     @Override
-    public String login(String username, String password) throws Exception {
+    public LoginInfo login(String username, String password) throws Exception {
         try {
             password = init(password);
         } catch (Exception e) {
@@ -48,7 +50,13 @@ public class LogInfoServiceImpl implements LogInfoService {
         redisCache.setCacheObject(token, user, 1, TimeUnit.HOURS);
         LoginUser u = redisCache.getCacheObject(token);
         System.out.println(u);
-        return token;
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setToken(token);
+        userInfo userInfo = new userInfo();
+        userInfo.setNickName(user.getNickName());
+        userInfo.setAvatar(user.getAvatar());
+        loginInfo.setUserInfo(userInfo);
+        return loginInfo;
     }
 
     /**

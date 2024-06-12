@@ -64,7 +64,7 @@ public class FilterConfig implements HandlerInterceptor {
                 sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, new ErrorResponse("Invalid token", "Token expired"));
                 return false; // 终止请求
             }
-            request.setAttribute("loginUser", claims);
+            request.setAttribute("claims", claims);
         } catch (Exception e) {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, new ErrorResponse("Invalid token", e.getMessage()));
             return false; // 终止请求
@@ -78,6 +78,7 @@ public class FilterConfig implements HandlerInterceptor {
                 sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, new ErrorResponse("Invalid token", "User not found"));
                 return false; // 终止请求
             }
+            request.setAttribute("loginUser", user);
         } catch (Exception e) {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, new ErrorResponse("Invalid token", e.getMessage()));
             return false; // 终止请求
@@ -88,6 +89,8 @@ public class FilterConfig implements HandlerInterceptor {
             redisCache.setCacheObject(newToken, user, 1, TimeUnit.HOURS);
             response.setHeader("Authorization", newToken);
         }
+
+        response.setHeader("Accept","application/json");
 
         return true; // 继续处理请求
     }

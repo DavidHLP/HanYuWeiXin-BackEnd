@@ -1,5 +1,8 @@
 package org.example.system.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.system.domain.VO.LoginInfo;
+import org.example.system.domain.userInfo;
 import org.example.system.service.LogInfoService;
 import org.example.system.utils.ResultMap;
 import org.springframework.http.HttpHeaders;
@@ -34,10 +37,12 @@ public class LogInfoController {
     @GetMapping("/login")
     public ResponseEntity<ResultMap> login(String username, String password) {
         try {
-            String token = logInfoServiceImpl.login(username, password);
+            LoginInfo loginInfo = logInfoServiceImpl.login(username, password);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", token);
+            headers.set("Authorization", loginInfo.getToken());
+            ObjectMapper objectMapper = new ObjectMapper();
+            headers.set("userInfo",objectMapper.writeValueAsString(loginInfo.getUserInfo()));
 
             return new ResponseEntity<>(ResultMap.success("登录成功"), headers, HttpStatus.OK);
         } catch (Exception e) {
