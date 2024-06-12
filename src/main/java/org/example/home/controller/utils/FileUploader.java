@@ -90,29 +90,29 @@ public class FileUploader {
             boolean status = rootNode.path("status").asBoolean();
             if (status) {
                 JsonNode dataNode = rootNode.path("data");
-                String key = dataNode.path("key").asText();
-                String name = dataNode.path("name").asText();
-                String pathname = dataNode.path("pathname").asText();
-                String originName = dataNode.path("origin_name").asText();
-                float size = dataNode.path("size").floatValue();
-                String mimetype = dataNode.path("mimetype").asText();
-                String extension = dataNode.path("extension").asText();
-                String md5 = dataNode.path("md5").asText();
-                String sha1 = dataNode.path("sha1").asText();
+//                String key = dataNode.path("key").asText();
+//                String name = dataNode.path("name").asText();
+//                String pathname = dataNode.path("pathname").asText();
+//                String originName = dataNode.path("origin_name").asText();
+//                float size = dataNode.path("size").floatValue();
+//                String mimetype = dataNode.path("mimetype").asText();
+//                String extension = dataNode.path("extension").asText();
+//                String md5 = dataNode.path("md5").asText();
+//                String sha1 = dataNode.path("sha1").asText();
                 String url = dataNode.path("links").path("url").asText();
 
                 // 打印上传结果
-                System.out.println("Upload successful.");
-                System.out.println("Key: " + key);
-                System.out.println("Name: " + name);
-                System.out.println("Pathname: " + pathname);
-                System.out.println("Origin Name: " + originName);
-                System.out.println("Size: " + size + " KB");
-                System.out.println("Mimetype: " + mimetype);
-                System.out.println("Extension: " + extension);
-                System.out.println("MD5: " + md5);
-                System.out.println("SHA1: " + sha1);
-                System.out.println("URL: " + url);
+//                System.out.println("Upload successful.");
+//                System.out.println("Key: " + key);
+//                System.out.println("Name: " + name);
+//                System.out.println("Pathname: " + pathname);
+//                System.out.println("Origin Name: " + originName);
+//                System.out.println("Size: " + size + " KB");
+//                System.out.println("Mimetype: " + mimetype);
+//                System.out.println("Extension: " + extension);
+//                System.out.println("MD5: " + md5);
+//                System.out.println("SHA1: " + sha1);
+//                System.out.println("URL: " + url);
                 clearToken();
                 return new UrlAndBollean(url, true);
             } else {

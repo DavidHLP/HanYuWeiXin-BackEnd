@@ -20,4 +20,13 @@ public interface LogInfoService {
      * @throws Exception 当登录过程出现问题时抛出异常
      */
     public LoginInfo login(String username, String password) throws Exception;
+
+    /**
+     * 初始化密码，使用 SHA-256 进行加密。
+     *
+     * @param password 密码
+     * @return 加密后的密码
+     * @throws Exception 当密码为空或加密过程出现问题时抛出异常
+     */
+    public String init(String password) throws Exception;
 }

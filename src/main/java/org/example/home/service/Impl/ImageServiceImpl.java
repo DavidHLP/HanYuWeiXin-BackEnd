@@ -38,37 +38,53 @@ public class ImageServiceImpl implements ImageService {
      * @param parentId 父级ID
      * @return 图像URL列表
      */
+    @Override
     public List<ImageUrl> selectById(int parentId) {
         return imageMapper.selectById(parentId);
     }
 
+    public UrlAndBollean avatarUpload(MultipartFile[] files, String path, LoginUser user) throws Exception {
+        UrlAndBollean urlAndBollean = insertAndUpload(files, path, user);
+        if (urlAndBollean.getFlag()) {
+            imageMapper.updateAvatar(user.getId(), urlAndBollean.getUrl());
+        }else {
+            return new UrlAndBollean(null, false);
+        }
+        return urlAndBollean;
+    }
+
     /**
-     * 插入图像URL。
+     * 插入图像URL并上传图像文件。
      *
+     * @param files 上传的图像文件数组
+     * @param path 保存图像文件的路径
+     * @param user 当前登录用户
+     * @return 包含上传状态和URL的对象
+     * @throws Exception 如果处理文件时发生错误
      */
-
-    public UrlAndBollean insertAndUpload(MultipartFile[] files , String path , LoginUser user) throws Exception {
-
+    @Override
+    public UrlAndBollean insertAndUpload(MultipartFile[] files, String path, LoginUser user) throws Exception {
         if (files == null || files.length == 0) {
             return new UrlAndBollean(null, false);
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<Desource> list = new ArrayList<>();
-        ArrayList<Desource> downloadList = new ArrayList<>();
+        List<Desource> list = new ArrayList<>();
+        List<Desource> downloadList = new ArrayList<>();
 
         // 确保目录存在
         File dir = new File(path);
         if (!dir.exists()) {
             dir.mkdirs();
         }
+
         UrlAndBollean url = null;
         if (files != null && files.length > 0) {
             String json = JSONFileUtils.readFile(path + "files.json");
             String downloadJson = JSONFileUtils.readFile(path + "download.json");
-            if (json != null && json.length() != 0 && downloadJson != null && downloadJson.length() != 0){
-                list = mapper.readValue(json, new TypeReference<ArrayList<Desource>>() {});
-                downloadList = mapper.readValue(downloadJson, new TypeReference<ArrayList<Desource>>() {});
+            if (json != null && !json.isEmpty() && downloadJson != null && !downloadJson.isEmpty()) {
+                list = mapper.readValue(json, new TypeReference<List<Desource>>() {});
+                downloadList = mapper.readValue(downloadJson, new TypeReference<List<Desource>>() {});
             }
 
             for (MultipartFile file : files) {
@@ -90,9 +106,8 @@ public class ImageServiceImpl implements ImageService {
                 // 保存文件
                 file.transferTo(destFile);
                 list.add(new Desource(filename));
-                url =  fileUploader.uploadImage(filePath);
+                url = fileUploader.uploadImage(filePath);
                 downloadList.add(new Desource(url.getUrl()));
-                imageMapper.updateAvatar(user.getId(), url.getUrl());
             }
 
             // 更新文件列表
@@ -104,17 +119,23 @@ public class ImageServiceImpl implements ImageService {
             return new UrlAndBollean(url.getUrl(), true);
         }
         return new UrlAndBollean(url.getUrl(), false);
-
     }
 
+    /**
+     * 获取图像列表。
+     *
+     * @param path 文件路径
+     * @return 图像列表
+     * @throws Exception 如果读取文件时发生错误
+     */
+    @Override
     public List<Desource> getImage(String path) throws Exception {
         String json = JSONFileUtils.readFile(path);
-        ArrayList<Desource> downloadList = new ArrayList<>();
-        if (json != null && json.length() != 0){
+        List<Desource> downloadList = new ArrayList<>();
+        if (json != null && !json.isEmpty()) {
             ObjectMapper mapper = new ObjectMapper();
-            downloadList = mapper.readValue(json, new TypeReference<ArrayList<Desource>>() {});
+            downloadList = mapper.readValue(json, new TypeReference<List<Desource>>() {});
         }
         return downloadList;
     }
-
 }

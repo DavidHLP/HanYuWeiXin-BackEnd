@@ -1,5 +1,6 @@
 package org.example.system.config;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,7 +33,7 @@ public class FilterConfig implements HandlerInterceptor {
         System.out.println("FilterConfig initialized");
     }
 
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
     /**
@@ -91,6 +92,7 @@ public class FilterConfig implements HandlerInterceptor {
         }
 
         response.setHeader("Accept","application/json");
+        response.setCharacterEncoding("UTF-8");
 
         return true; // 继续处理请求
     }

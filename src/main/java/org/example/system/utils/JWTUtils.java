@@ -2,7 +2,9 @@ package org.example.system.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -21,15 +23,7 @@ public class JWTUtils {
     // 使用更安全的密钥生成方法
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // 从配置文件中注入 expirationTime 属性
     private static final long DEFAULT_EXPIRATION_TIME = 3600000; // 默认值为 3600000 毫秒（60 分钟）
-
-    /**
-     * 构造方法，用于初始化 JWTUtils 实例。
-     */
-    public JWTUtils() {
-        System.out.println("JWTUtils initialized");
-    }
 
     /**
      * 创建 JWT。

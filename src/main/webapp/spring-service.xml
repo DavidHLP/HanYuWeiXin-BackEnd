@@ -9,6 +9,5 @@
 
     <!-- 1. 扫描service层的相关bean -->
     <context:component-scan base-package="org.example.system.service"/>
-    <context:component-scan base-package="org.example.common.service"/>
     <context:component-scan base-package="org.example.home.service"/>
 </beans>

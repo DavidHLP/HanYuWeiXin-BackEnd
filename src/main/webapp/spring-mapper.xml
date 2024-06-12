@@ -16,7 +16,6 @@
 
     <!-- 扫描@mapper -->
     <context:component-scan base-package="org.example.system.mapper"/>
-    <context:component-scan base-package="org.example.common.mapper"/>
     <context:component-scan base-package="org.example.home.mapper"/>
 
     <!-- 2. 数据库连接池 -->

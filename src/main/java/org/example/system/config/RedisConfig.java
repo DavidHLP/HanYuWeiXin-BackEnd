@@ -124,6 +124,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 提供限流Lua脚本文本.
      *
      * @return String
+     * @author ruoyi
      */
     private String limitScriptText() {
         return "local key = KEYS[1]\n" +

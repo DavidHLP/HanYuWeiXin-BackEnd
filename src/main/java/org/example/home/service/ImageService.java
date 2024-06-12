@@ -26,4 +26,5 @@ public interface ImageService {
 
     public UrlAndBollean insertAndUpload(MultipartFile[] files , String path , LoginUser user) throws Exception;
     public List<Desource> getImage(String path) throws Exception;
+    public UrlAndBollean avatarUpload(MultipartFile[] files, String path, LoginUser user) throws Exception;
 }
