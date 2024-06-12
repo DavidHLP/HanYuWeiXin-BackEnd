@@ -1,5 +1,6 @@
 package org.example.home.service;
 
+import org.example.common.constant.Desource;
 import org.example.home.controller.utils.UrlAndBollean;
 import org.example.home.domain.ImageUrl;
 import org.example.system.domain.LoginUser;
@@ -24,4 +25,5 @@ public interface ImageService {
     public List<ImageUrl> selectById(int parentId);
 
     public UrlAndBollean insertAndUpload(MultipartFile[] files , String path , LoginUser user) throws Exception;
+    public List<Desource> getImage(String path) throws Exception;
 }

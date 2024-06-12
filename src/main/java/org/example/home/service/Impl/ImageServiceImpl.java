@@ -55,6 +55,7 @@ public class ImageServiceImpl implements ImageService {
 
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<Desource> list = new ArrayList<>();
+        ArrayList<Desource> downloadList = new ArrayList<>();
 
         // 确保目录存在
         File dir = new File(path);
@@ -64,8 +65,10 @@ public class ImageServiceImpl implements ImageService {
         UrlAndBollean url = null;
         if (files != null && files.length > 0) {
             String json = JSONFileUtils.readFile(path + "files.json");
-            if (json != null && json.length() != 0) {
+            String downloadJson = JSONFileUtils.readFile(path + "download.json");
+            if (json != null && json.length() != 0 && downloadJson != null && downloadJson.length() != 0){
                 list = mapper.readValue(json, new TypeReference<ArrayList<Desource>>() {});
+                downloadList = mapper.readValue(downloadJson, new TypeReference<ArrayList<Desource>>() {});
             }
 
             for (MultipartFile file : files) {
@@ -88,17 +91,30 @@ public class ImageServiceImpl implements ImageService {
                 file.transferTo(destFile);
                 list.add(new Desource(filename));
                 url =  fileUploader.uploadImage(filePath);
+                downloadList.add(new Desource(url.getUrl()));
                 imageMapper.updateAvatar(user.getId(), url.getUrl());
             }
 
             // 更新文件列表
             json = mapper.writeValueAsString(list);
+            downloadJson = mapper.writeValueAsString(downloadList);
             JSONFileUtils.writeFile(json, path + "files.json");
+            JSONFileUtils.writeFile(downloadJson, path + "download.json");
 
             return new UrlAndBollean(url.getUrl(), true);
         }
         return new UrlAndBollean(url.getUrl(), false);
 
+    }
+
+    public List<Desource> getImage(String path) throws Exception {
+        String json = JSONFileUtils.readFile(path);
+        ArrayList<Desource> downloadList = new ArrayList<>();
+        if (json != null && json.length() != 0){
+            ObjectMapper mapper = new ObjectMapper();
+            downloadList = mapper.readValue(json, new TypeReference<ArrayList<Desource>>() {});
+        }
+        return downloadList;
     }
 
 }

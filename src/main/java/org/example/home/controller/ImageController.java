@@ -76,39 +76,13 @@ public class ImageController extends BaseController {
         }
     }
 
-    @GetMapping("/getFilesName")
-    public void getFilesName(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String path = request.getServletContext().getRealPath("/") + "files/files.json";
-        String json = JSONFileUtils.readFile(path);
+    @GetMapping("/getDownloadFilesName")
+    public ResultMap getDownloadFilesName(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String path = request.getServletContext().getRealPath("./") + "/files/download.json";
+        List<Desource> res= imageService.getImage(path);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.getWriter().write(json);
-    }
-
-    @GetMapping("/download")
-    public ResponseEntity<byte[]> fileDownload(HttpServletRequest request, @RequestParam("filename") String filename) throws Exception {
-        String path = request.getServletContext().getRealPath("/files/");
-        filename = new String(filename.getBytes("ISO-8859-1"), "UTF-8");
-        File file = new File(path + File.separator + filename);
-        if (!file.exists()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        HttpHeaders headers = new HttpHeaders();
-        filename = this.getFileName(request, filename);
-        headers.setContentDispositionFormData("attachment", filename);
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<>(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);
-    }
-
-    public String getFileName(HttpServletRequest request, String filename) throws Exception {
-        Base64.Encoder base64Encoder = Base64.getEncoder();
-        String agent = request.getHeader("User-Agent");
-        if (agent.contains("Firefox")) {
-            filename = "=?UTF-8?B?" + base64Encoder.encodeToString(filename.getBytes("UTF-8")) + "?=";
-        } else {
-            filename = URLEncoder.encode(filename, "UTF-8");
-        }
-        return filename;
+        return success("查询成功", res);
     }
 
 }
