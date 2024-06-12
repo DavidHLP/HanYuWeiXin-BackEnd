@@ -13,6 +13,7 @@ target/
 *.ipr
 *.properties
 **/**/Redis.properties
+/files/*.json
 
 ### Eclipse ###
 .apt_generated
