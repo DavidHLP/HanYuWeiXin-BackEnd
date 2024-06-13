@@ -48,7 +48,7 @@ public class ImageController extends BaseController {
      * @return 包含上传结果的 ResultMap
      * @throws Exception 如果处理文件时发生错误
      */
-    @PostMapping("/fileUpload")
+    @PostMapping("/fileUpLoad")
     public ResultMap fileUpload(@RequestParam("avatar") MultipartFile[] files, HttpServletRequest request) throws Exception {
         String path = request.getServletContext().getRealPath("./") + "/files/";
         LoginUser user = (LoginUser) request.getAttribute("loginUser");
